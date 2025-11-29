@@ -1,184 +1,232 @@
-# AI Agents vs AI Workflows
----
+<img src="https://cdn.prod.website-files.com/677c400686e724409a5a7409/6790ad949cf622dc8dcd9fe4_nextwork-logo-leather.svg" alt="NextWork" width="300" />
 
-## Introduction
+# Infrastructure as Code with CloudFormation
 
-Understanding the distinction between AI agents and AI workflows is crucial for choosing the right approach for your projects. This guide explains both concepts and helps you determine when to use each.
+**Project Link:** [View Project](http://learn.nextwork.org/projects/aws-devops-cloudformation-updated)
 
----
-
-## What are AI Workflows?
-
-AI workflows are deterministic sequences of steps. You have a program that automates a certain task or problem, and that program simply executes multiple steps.
-
-### Example Workflow
-
-A typical workflow might:
-1. Open a file
-2. Read the file content
-3. Transform that content
-4. Save the transformed content somewhere else
-
-### Definition
-
-In that sense, every program could be called a workflow. However, if one or more of these steps use AI or large language models, we call it an **AI workflow**. It automates a certain task with the help of AI.
-
-### Characteristics
-
-- **Deterministic:** Steps are predefined and execute in order
-- **Predictable:** You know exactly what will happen at each stage
-- **Controlled:** The developer defines every step
+**Author:** Duc Thai  
+**Email:** ducthai060501@gmail.com
 
 ---
 
-## What are AI Agents
-
-AI agents are autonomous systems where you set up an agent by writing a program that uses an AI model, typically a large language model, to plan the execution of a certain task and then execute that plan.
-
-### How AI Agents Work
-
-1. The AI model creates a plan
-2. You, the developer, give it access to tools
-3. The agent uses those tools to execute the plan
-
-### Important Distinction
-
-What's crucial to understand is that the large language model, the AI itself, will never execute anything directly. Instead, it will just call tools you expose to it.
-
-**The AI does not act on its own.** It only acts based on which tools you give to it. This is a fundamental concept.
-
-### Characteristics
-
-- **Autonomous:** The AI determines the execution plan
-- **Dynamic:** Adapts based on context and available tools
-- **Tool-Based:** Relies on tools provided by the developer
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_bd8b836b" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
 
 ---
 
-## Key Differences
+## Introducing Today's Project!
 
-### AI Workflows
+In this project, I will demonstrate how to use AWS CloudFormation to turn your web app infrastructure into a single, reusable template. The steps I'll cover include:
 
-- **Higher level of control:** You define every step, and the program will execute accordingly
-- **Best for:** Tasks with known input and output
-- **Predictable:** Execution follows a predetermined path
+🏎️ Generating a CloudFormation template to define all the necessary resources for my web application  
+👩‍🔧 Fixing common errors in infrastructure as code templates to ensure smooth deployments  
+🌟 Watching as the template automatically creates new resources in my AWS account  
+💎 Manually adding new resources to the template to customize and expand my infrastructure
 
-### AI Agents
+I'm doing this project to learn how to automate infrastructure management, reduce manual setup, and gain hands-on experience with infrastructure as code best practices using CloudFormation.
 
-- **Less control:** The AI decides the execution plan
-- **Best for:** Tasks with unknown input and output
-- **Flexible:** Adapts to different scenarios dynamically
+### Key tools and concepts
 
----
+Services I used were AWS EC2, AWS S3, AWS CodeArtifact, AWS CodeBuild, AWS CodeDeploy, IAM, and AWS CloudFormation.
 
-## Control and Use Cases
+Key concepts I learnt include:
+- Automating infrastructure setup using CloudFormation templates  
+- Managing permissions and roles securely with IAM  
+- Setting up CI/CD pipelines with CodeBuild and CodeDeploy  
+- Using S3 and CodeArtifact to store build artifacts  
+- Debugging deployment issues related to caching and resource dependencies  
+- Handling infrastructure as code (IaC) best practices  
+- Troubleshooting CloudFormation errors such as circular dependencies and resource conflicts  
+- Making CloudFormation templates flexible and reusable with Parameters  
+- Understanding resource referencing and dependency management in templates
 
-### When to Use AI Workflows
+### Project reflection
 
-Use workflows when:
-- You have clearly defined inputs and outputs
-- The process steps are well-understood
-- Consistency and predictability are priorities
-- You need complete control over execution
+This project took me approximately a 3 hoursto complete.  challenging part was debugging and resolving CloudFormation dependency and configuration errors. It was most rewarding to see the stack deploy successfully after breaking cycles and correcting resource references.
 
-### When to Use AI Agents
-
-Use agents when:
-- Inputs and outputs are variable or unknown
-- The task requires dynamic decision-making
-- You need the system to adapt to different scenarios
-- Problem-solving requires multiple approaches
+This project is part six of a series of DevOps projects where I'm building a CI/CD pipeline! I'll be working on the next project on 24th October..
 
 ---
 
-## Real-World Definitions
+## Generating a CloudFormation Template
 
-**Important Note:** This is just one way of defining AI agents and workflows. In real life, many tools and systems claim to be "agents," which can make the distinction confusing. The terminology is not standardized, so you'll encounter various interpretations.
+The IaC Generator is a tool that helps automate the creation of infrastructure-as-code templates by scanning your AWS account for existing resources. It works in a three-step process:
 
-The key is to understand the underlying concepts:
-- **Control vs Autonomy:** How much decision-making power does the AI have?
-- **Deterministic vs Dynamic:** Are the steps fixed or adaptable?
-- **Tool Access:** What capabilities are available to the system?
+1. **Scan**: It scans all the resources in your AWS account to detect what you have set up.
+2. **Template Creation**: You select and bundle the scanned resources into a template, defining what you want to deploy and manage together.
+3. **Import**: You import this template into AWS CloudFormation to deploy all the resources in one go, making infrastructure setup, updates, and management much easier and more consistent.
 
----
+A CloudFormation template is a JSON or YAML file that defines AWS resources and their configurations, allowing you to automate the setup, update, and management of your infrastructure as code. You can use it to create, modify, or delete resources in a consistent and repeatable way.
 
-## No-Code Approach
+The resources I could add to my template include:
+- **AWS::CodeArtifact::Repository**: Two CodeArtifact repositories for storing and sharing build artifacts.
+- **AWS::S3::Bucket**: One S3 bucket for build artifacts.
+- **AWS::CodeStarConnections::Connection**: One GitHub connection for source control integration.
+- **AWS::CodeDeploy::Application**: One CodeDeploy application for managing deployments.
+- **AWS::IAM::Role**: Three IAM roles for the development EC2 instance, CodeBuild, and CodeDeploy.
+- **AWS::IAM::ManagedPolicy**: One IAM managed policy to grant CodeArtifact access.
 
-While no-code platforms exist for building AI workflows and agents, they may not be suitable for everyone.
 
-**Personal Preference:** Some developers prefer to code directly rather than use no-code platforms. Coding provides:
-- Greater flexibility
-- More control over implementation
-- Better understanding of the underlying logic
-- Easier debugging and customization
+The resources I couldn’t add to my template were my CodeBuild project and CodeDeploy deployment group, because the IaC generator doesn’t currently support exporting these resources into CloudFormation templates. This means I had to manually define them in my template or set them up separately, since not all AWS resources are supported for automatic detection and template generation by the tool.
 
-Choose the approach that fits your skills and project requirements.
-
----
-
-## Proprietary vs Open LLMs
-
-### Proprietary LLMs
-
-Examples: OpenAI, Cohere, Anthropic
-
-**Advantages:**
-- More powerful and capable
-- Better performance on complex tasks
-- Regular updates and improvements
-- Professional support
-
-**Disadvantages:**
-- You have to pay for usage
-- Cannot run locally on your own hardware
-- Potential data privacy concerns
-- Dependency on external services
-
-### Open LLMs
-
-Examples: Llama, Mistral, Falcon
-
-**Advantages:**
-- Can be run locally on your own hardware
-- Better data privacy and control
-- No ongoing usage costs after initial setup
-- Full customization possible
-
-**Disadvantages:**
-- Generally less powerful than proprietary models
-- Require more technical expertise to set up
-- Hardware requirements can be significant
-- May need fine-tuning for specific tasks
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_0495b046" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
 
 ---
 
-## Summary
+## Template Testing
 
-### Key Takeaways
+Before testing my template, I deleted the CI/CD resources from my AWS account that I set up earlier. I did this because CloudFormation deployment will fail if resources with the same name already exist. Removing the old resources prevents naming conflicts, ensures a smooth deployment, and keeps my account organized without duplicate resources.
 
-1. **AI Workflows** are deterministic sequences of steps where AI is used in one or more steps, providing high control and predictability.
+The result of my first template test was a failure:  
+Resource handler returned message: "The role with name codebuild-nextwork-devops-cicd-service-role cannot be found."  
+This happened because AWS couldn’t find the IAM role (codebuild-nextwork-web-build-service-role) that CloudFormation was trying to use, even though I was creating it in the same CloudFormation template. The issue is that CloudFormation sometimes tries to create and attach policies to the IAM role before the role itself exists—like looking for a file before it’s been saved. This dependency timing caused the error during deployment.
 
-2. **AI Agents** are autonomous systems where the AI creates and executes plans using tools you provide, offering flexibility but less direct control.
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_f56730fd" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
 
-3. **AI Never Acts Alone:** The AI model only calls tools you expose to it; it doesn't execute anything independently.
+---
 
-4. **Control Trade-Off:** Workflows give more control, agents give more autonomy. Choose based on your task requirements.
+## DependsOn
 
-5. **Use Case Matters:** 
-   - Known inputs/outputs → Workflows
-   - Unknown/variable inputs/outputs → Agents
+To resolve the error, I find my  four IAM policies in the template, their name start with "IAMManagedPolicyPolicyserviceroleCodeBuildBasePolicynextworkdevopscicdeunorth1" and then I added this magical line that will tell CloudFormation to ✋ wait ✋ and create the IAM role first, before we try attach it to these polcies:  DependsOn: "IAMRoleCodebuildnextworkdevopscicdservicerole" which is my IAM role name is the cloud formatino template..
+The DependsOn attribute means The **DependsOn** attribute in a CloudFormation template explicitly tells CloudFormation to wait and create one resource before creating another that depends on it. In your case, by adding `DependsOn: "IAMRoleCodebuildnextworkdevopscicdservicerole"` to my IAM policies, I instructed CloudFormation to first create the IAM role and only then attach the policies to it. This fixes errors caused by CloudFormation trying to attach policies before the role exists, ensuring the resources are created in the correct order.
 
-6. **Terminology Varies:** In practice, many systems are called "agents" even if they don't fit the strict definition. Focus on understanding the underlying concepts.
+The **DependsOn** line was added to four different parts of my CloudFormation template—specifically, to the resources that define the IAM managed policies. For each policy, I added the DependsOn attribute to make sure the IAM role is created before the policy is attached.
 
-7. **Implementation Choice:** Both no-code and code-based approaches are valid. Choose based on your skills and requirements.
+**Example locations:**
+1. **CodeArtifact Access Policy:**  
+   DependsOn added to the resource for the IAM managed policy granting CodeArtifact access.
 
-8. **LLM Selection:** Balance between proprietary (powerful but costly) and open (private but resource-intensive) models based on your needs.
+2. **CodeBuild Base Policy:**  
+   DependsOn added to the resource for the IAM managed policy used by CodeBuild.
 
-### Decision Framework
+3. **CodeDeploy Base Policy:**  
+   DependsOn added to the resource for the IAM managed policy used by CodeDeploy.
 
-When starting a project, ask:
-- Do I know all the steps in advance? → Consider a workflow
-- Does the task require dynamic decision-making? → Consider an agent
-- What level of control do I need? → More control = workflow, more flexibility = agent
-- What are my data privacy requirements? → May influence LLM choice
-- What are my budget and resource constraints? → Influences both architecture and LLM choice
+4. **EC2 Instance Base Policy:**  
+   DependsOn added to the resource for the IAM managed policy used by your development EC2 instance.
+
+In each case, the DependsOn attribute references the IAM role that each policy is supposed to attach to, ensuring CloudFormation creates the role first before attaching the policy.
+
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_f0df8018" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
+
+---
+
+## Circular Dependencies
+
+I gave my CloudFormation template another test! But this time the new error I ran into was a "circular dependency" in my CloudFormation template. This happens when my IAM policies are set to depend on the IAM role being created first (using DependsOn), but the IAM role itself also references those same policies in its definition. CloudFormation gets stuck in a loop, since each resource is waiting for the other to exist before it can be created. It’s like a chicken-and-egg problem—CloudFormation doesn’t know which one to create first, so the deployment fails.
+
+To fix this error, I searched for the IAM role configuration in my CloudFormation template (using Ctrl + F for "IAMRolecodebuild"). I found a section called **ManagedPolicyArns** that was referencing my IAM policies. These references were unnecessary and were causing the circular dependency error. By removing the **ManagedPolicyArns** lines that pointed to my IAM policies, I broke the dependency loop and allowed CloudFormation to create the IAM role and attach the policies in the correct order. This resolved the circular dependency issue and let my template deploy successfully.
+
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_e6fd85ed" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
+
+---
+
+## Manual Additions
+
+The two resources I manually added to my CloudFormation template were:
+
+1. **CodeBuild Project**  
+2. **CodeDeploy Deployment Group**  
+
+When defining these resources, I referenced supporting resources using their logical IDs (the keys under `Resources:` in my template), not by their actual names. For example:
+- `<YOUR_CODEBUILD_SERVICE_ROLE_ID>` → `IAMRoleCodebuildnextworkdevopscicdservicerole`
+- `<YOUR_S3_BUCKET_ID>` → `S3BucketNextworkdevopscicddukem`
+- `<YOUR_CODEDEPLOY_ROLE_ID>` → `IAMRoleNextWorkCodeDeployRole`
+- `<YOUR_CODEDEPLOY_APPLICATION_ID>` → `CodeDeployApplicationNextworkdevopscicd`
+
+Using logical IDs ensures CloudFormation can resolve dependencies and properly link resources during deployment.
+
+I also had to make sure the references were consistent in this template, so I edited my CodeBuild project definition to:
+
+- Use the logical IDs of resources (like IAM roles, S3 buckets, and CodeArtifact repositories) instead of hardcoded resource names.
+- Reference the IAM role using its logical ID (e.g., IAMRoleCodebuildnextworkdevopscicdservicerole) for the service role.
+- Reference the S3 bucket for build artifacts using its logical ID (e.g., S3BucketNextworkdevopscicddukem).
+- Reference other dependencies, such as environment variables or source locations, with parameters or logical IDs to ensure CloudFormation correctly links resources.
+- Remove any hardcoded ARNs or names, replacing them with Fn::GetAtt or Ref functions to keep the template reusable and error-free.
+
+These edits ensure that all resource links are managed by CloudFormation and the template is portable and reliable across environments.
+
+I also introduce Parameters in a CloudFormation template are customizable input values that you define under the `Parameters` section. They allow you to make your template reusable and flexible by letting users specify values when they launch the stack, instead of hardcoding everything.
+
+For example, in your template:
+```yaml
+Parameters:
+  GitHubRepoOwner:
+    Type: String
+    Description: GitHub repository owner
+    Default: "your-github-username"
+  GitHubRepo:
+    Type: String
+    Description: GitHub repository name
+    Default: "nextwork-web-project"
+```
+
+These parameters let you set the GitHub repository owner and name dynamically. When deploying, you can provide different values for these fields, making your template adaptable for various projects or environments.
+
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_1cee0428" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
+
+---
+
+## Success!
+
+I could verify all the deployed resources by visiting the **Resources** tab in the CloudFormation console. This tab shows a complete list of all resources that were created by your CloudFormation stack, along with their status and logical IDs.
+
+<img src="http://learn.nextwork.org/relaxed_teal_timid_avocado/uploads/aws-devops-cloudformation-updated_bd8b836b" alt="Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
+
+---
+
+---
+
+
+## Some more error:
+Before getting success, I encountered some more error.
+Here’s a concise summary of what changed to resolve each error and why it worked.
+
+1) Error: “resource specifies a HostArn that your account does not own”
+- What caused it:
+  - The template set HostArn on an AWS::CodeStarConnections::Connection resource, but you’re using GitHub.com. HostArn is only for self‑hosted providers (e.g., GitHub Enterprise Server); also, I accidentally put a connection ARN where a host ARN would be expected.
+- What I changed:
+  - Removed the Connection resource block entirely (commented out) and stopped specifying HostArn.
+  - For now, I configured CodeBuild Source with Type: GITHUB (legacy OAuth), so the stack no longer needs to create or reference a CodeConnections resource.
+- Why this fixes it:
+  - GitHub.com connections do not use HostArn. By removing the Connection resource (and HostArn), CloudFormation no longer tries to create a connection tied to a non‑existent “host.”
+  - If I later want to use CodeConnections, keep HostArn unset and either:
+    - Reference an existing connection ARN in CodeBuild Source (Type: CODECONNECTIONS + ConnectionArn), or
+    - Let CFN create the Connection without HostArn and then complete the “Authorize” step in the console.
+
+2) Error: “role cannot be found”
+- What caused it:
+  - Managed policies and roles referenced each other in both directions (policies attaching to roles via the ManagedPolicy.Roles property while roles also attached the same policies via ManagedPolicyArns). This can cause timing/order issues where CFN tries to attach a policy to a role that isn’t created yet.
+- What I changed:
+  - For the CodeArtifact consumer policy (IAMManagedPolicyPolicycodeartifactnextworkconsumerpolicy), I removed:
+    - Roles: [...]
+    - Users: [...]
+    - Any forced DependsOn to roles
+  - I attached that policy to IAMRoleEc2instancenextworkcicd using the role’s ManagedPolicyArns: [ !Ref IAMManagedPolicyPolicycodeartifactnextworkconsumerpolicy ].
+- Why this fixes it:
+  - Using just one attachment direction (role → managed policy via ManagedPolicyArns) lets CloudFormation infer the correct creation order automatically, so the role exists before policy attachment is evaluated.
+
+3) Error: Circular dependency (IAMInstanceProfileEc2instancenextworkcicd, IAMManagedPolicyPolicycodeartifactnextworkconsumerpolicy, IAMRoleEc2instancenextworkcicd)
+- What caused it:
+  - A cycle existed: the managed policy depended on the role (via Roles or DependsOn), while the role depended on the managed policy (via ManagedPolicyArns), and the instance profile depended on the role. This created a loop CFN couldn’t resolve.
+- What I changed:
+  - Broke the loop by:
+    - Removing the policy’s Roles (and DependsOn) so the policy no longer depends on the role.
+    - Keeping the single direction: Role → ManagedPolicy via ManagedPolicyArns.
+    - Leaving the instance profile to depend only on the role (normal, linear dependency).
+- Why this fixes it:
+  - The dependency chain is now acyclic:
+    - ManagedPolicy (standalone) → referenced by Role via ManagedPolicyArns
+    - InstanceProfile → references Role
+    - No back‑references from ManagedPolicy to Role
+
+Additional observations and suggestions
+- In my final working template, the CodeBuild base managed policy still lists Roles and a DependsOn. It works, but for consistency and to avoid future ordering issues, I can remove Roles/Users/DependsOn from that policy too and attach it only via the CodeBuild role’s ManagedPolicyArns.
+- I am currently using Source.Type: GITHUB in CodeBuild. If I want to use my existing CodeConnections connection (recommended), switch to:
+  - Source.Type: CODECONNECTIONS
+  - Add ConnectionArn: arn:aws:codeconnections:eu-north-1:841162690953:connection/f5382a03-8c6b-4254-9cba-b81ae715d040
+  - Ensure the CodeBuild role allows codeconnections:UseConnection and codeconnections:GetConnection on that ARN.
+
+Net effect of the changes
+- Removed HostArn usage for GitHub.com (and commented out the CFN connection resource), eliminating the “HostArn not owned” failure.
+- Normalized IAM wiring to a one‑way attachment (roles attach managed policies), eliminating “role cannot be found” and the circular dependency.
+- Let CloudFormation infer dependencies via !Ref/!GetAtt instead of forcing DependsOn for IAM attachments.

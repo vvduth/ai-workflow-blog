@@ -281,7 +281,7 @@ def main():
 
         cycles += 1
 
-        if not evaluation.needs_improvement or cycles > 3:
+        if not evaluation.needs_improvement or cycles > 1:
             break
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
