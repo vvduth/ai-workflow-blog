@@ -97,11 +97,6 @@ def generate_article_draft(outline: str) -> str:
 
     return generated_text
 
-class Evaluation(BaseModel):
-    needs_improvement: bool = Field(
-        description="Whether the draft needs to be improved")
-    feedback: str = Field(description="Feedback on how to improve the draft")
-
 
 def generate_thumbnail(article: str) -> bytes:
     print("Generating thumbnail...")
@@ -129,14 +124,17 @@ def main():
     print("Generated blog post draft:")
     print(blog_post_draft)
 
-    # thumbnail_image = generate_thumbnail(blog_post_draft)
-    # thumbnail_file = outline_file.replace(".txt", "_thumbnail.jpeg")
-    # with open(thumbnail_file, "wb") as f:
-    #     f.write(thumbnail_image)
-    # print(f"Thumbnail saved to '{thumbnail_file}'.")
+    thumbnail_image = generate_thumbnail(blog_post_draft)
+    thumbnail_file = outline_file.replace(".txt", "_thumbnail.jpeg")
+    with open(thumbnail_file, "wb") as f:
+        f.write(thumbnail_image)
+    print(f"Thumbnail saved to '{thumbnail_file}'.")
 
     output_file = outline_file.replace(".txt", "_draft.md")
     save_file(output_file, blog_post_draft)
+    # also save into my blog folder
+    save_file("C:\\Users\\ducth\\git_repos\\quicksight-01\\markdown\\ai_ml\\ai_workflow_blog_post_draft.md", blog_post_draft)
+    
     print(f"Blog post draft saved to '{output_file}'.")
 
 

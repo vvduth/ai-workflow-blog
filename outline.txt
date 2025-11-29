@@ -1,5 +1,14 @@
-- AI workflows vs AI agents: definition and differences
-  - AI workflows: Workflows that use AI (LLMs) in one or more steps
-  - AI agents: Autonomous programs that use AI to plan steps and execute them with help of provided tools
-- AI workflows & agents unlock brand-new use-cases like automating content creation
-- Human-in-the-loop is important though since LLMs can mess up and hallucinate
+Now, when building workflows, no matter if you're using AI or not, and therefore also when you're building AI agents, it's likely that not all
+steps need to run one after another, or maybe not all steps should run one after another.
+
+in the last workflow, that's essentially the only case we had, We ran all oursteps in sequence, sequential, which means one step after another, and we did that because many of our steps did depend on each other.
+
+And if step B depends on step A, it of course needs to run after step A. 
+
+
+but there are case when want to run steps in parallel, or when some steps are independent of each other and therefore can run in any order.
+For example, if you have step A that took really long to run, and step B that is independent of step A, you could run step B while waiting for step A to finish.
+
+you could also run steps conditionally, for example, if step A produces a result that indicates that step B should run, then you can run step B, otherwise you skip it.
+
+you could also repeat steps, That might make sense if you wanna refine a result over time, if you gather feedback, or if you are building a chat application where you want to allow the user to ask follow-up questions.
