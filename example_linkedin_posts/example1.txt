@@ -1,0 +1,14 @@
+What if you could talk to your computer and have it perform tasks through the Bash terminal—without writing a single command? With NVIDIA  Nemotron, you can build a natural‑language Bash agent from scratch in under an hour, with about 200 lines of Python and minimal dependencies.
+
+Curious how it works? Join us for a developer‑focused livestream that takes you from first principles to running code, exploring the “why” and “how” of building agentic AI through hands‑on examples.
+
+We’ll cover, step by step:
+- A live demo: building and running a Bash computer use agent in real time with Nemotron, NVIDIA’s open reasoning model
+- How to connect tools, use memory, and safely enable human‑in‑the‑loop command execution
+- A bonus look at how LangGraph simplifies orchestration and workflow design
+- Your questions, answered live—with explanations and no prior AI agent experience needed
+
+By the end, you’ll understand how modern AI agents think, plan, and act in code—and leave with reusable Python you can adapt to your own projects. Bring your curiosity and get ready to learn by doing!
+
+Create a Bash Agent in an hour:
+https://lnkd.in/g74Dcnm9

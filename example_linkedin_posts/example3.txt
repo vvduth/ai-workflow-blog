@@ -1,0 +1,17 @@
+Software creates workloads
+Workloads create traffic
+Traffic creates scaling problems
+Scaling problems create cloud engineers
+Cloud engineers create architectures
+Architectures create reliability
+Reliability creates happy teams
+Happy teams ship more features
+More features create more workloads
+
+…and the cycle continues.
+
+If you’re a cloud engineer, you know:
+– the only thing more endless than autoscaling groups
+– is the number of meetings explaining why something didn’t scale.
+
+Post Idea Credits: Shubham Srivastava
