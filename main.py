@@ -291,12 +291,12 @@ def main():
         linkedin_post = future_linkedin.result()
         thumbnail_image = future_thumbnail.result()
 
-    thumbnail_file = outline_file.replace(".txt", "_thumbnail.jpeg")
+    thumbnail_file = outline_file.replace(".md", "_thumbnail.jpeg")
     with open(thumbnail_file, "wb") as f:
         f.write(thumbnail_image)
     print(f"Thumbnail saved to '{thumbnail_file}'.")
 
-    linkedin_post_file = outline_file.replace(".txt", "_linkedin_post.txt")
+    linkedin_post_file = outline_file.replace(".md", "_linkedin_post.txt")
     save_file(linkedin_post_file, linkedin_post)
     print(f"LinkedIn post saved to '{linkedin_post_file}'.")
 
