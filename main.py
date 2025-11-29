@@ -123,15 +123,20 @@ def main():
         sys.exit(1)
 
     outline_file = sys.argv[1]
-
     outline = load_file(outline_file)
 
     blog_post_draft = generate_article_draft(outline)
+    print("Generated blog post draft:")
+    print(blog_post_draft)
+
+    # thumbnail_image = generate_thumbnail(blog_post_draft)
+    # thumbnail_file = outline_file.replace(".txt", "_thumbnail.jpeg")
+    # with open(thumbnail_file, "wb") as f:
+    #     f.write(thumbnail_image)
+    # print(f"Thumbnail saved to '{thumbnail_file}'.")
 
     output_file = outline_file.replace(".txt", "_draft.md")
-
     save_file(output_file, blog_post_draft)
-
     print(f"Blog post draft saved to '{output_file}'.")
 
 
