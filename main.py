@@ -1,10 +1,11 @@
+import base64
 import sys
 import os
 
 # Run "uv sync" to install the below packages
 from dotenv import load_dotenv
 from openai import OpenAI
-
+from pydantic import BaseModel, Field
 load_dotenv(override=True)
 
 print(os.getenv("OPENAI_API_KEY"))
@@ -96,6 +97,25 @@ def generate_article_draft(outline: str) -> str:
 
     return generated_text
 
+class Evaluation(BaseModel):
+    needs_improvement: bool = Field(
+        description="Whether the draft needs to be improved")
+    feedback: str = Field(description="Feedback on how to improve the draft")
+
+
+def generate_thumbnail(article: str) -> bytes:
+    print("Generating thumbnail...")
+
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=f"Generate a thumbnail for the following blog post: {article}",
+        n=1,
+        output_format="jpeg",
+        size="1536x1024"
+    )
+
+    image_bytes = base64.b64decode(response.data[0].b64_json)
+    return image_bytes
 
 def main():
     if len(sys.argv) != 2:

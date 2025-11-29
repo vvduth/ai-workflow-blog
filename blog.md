@@ -49,4 +49,161 @@ so, in main, we need to execute these method/function/logics:
 3. we need a generate_article_draft function to generate the blog post draft based on the outline content, it get the outline content return by load_file as argument and return the blog post draft content.
 4. we need a save_file function to save the blog post draft to a markdown file, it get the blog post draft content and the output file path as arguments.
 
+here are load_file and save_file functions:
+
+```python
+def load_file(path: str) -> str:
+    if not os.path.exists(path):
+        print(f"Error: The file '{path}' does not exist.")
+        sys.exit(1)
+
+    print("Loading file:", path)
+    with open(path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+
+def save_file(path: str, content: str) -> None:
+    print("Saving file:", path)
+    with open(path, 'w', encoding='utf-8') as file:
+        file.write(content)
+```
+
+herr is what our main function will look like:
+
+```python
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <outline_file>")
+        sys.exit(1)
+
+    outline_file = sys.argv[1]
+
+    outline = load_file(outline_file)
+
+    blog_post_draft = generate_article_draft(outline)
+
+    output_file = outline_file.replace(".txt", "_draft.md")
+
+    save_file(output_file, blog_post_draft)
+
+    print(f"Blog post draft saved to '{output_file}'.")
+if __name__ == "__main__":
+    main()
+```
+
 so that the main.py, let go thorugh othrt files&folers for help our workflow generate content
+expample_posts/ => to load example posts
+ - example1.md
+ - example2.md
+
+
+## adding image thumnail genaration
+To enhance our AI-powered blog post generator, we can add a feature to generate a thumbnail image for the blog post. This can be achieved by integrating an image generation model into our workflow. Here's what we need to create:
+* a `generate_thumbnail` function that takes the blog post title or a brief description as input and returns a generated image URL or file path.
+* * logic to save the thumbnail image to a specified location.
+here our updated main function will look like this:
+
+```python
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <outline_file>")
+        sys.exit(1)
+
+    outline_file = sys.argv[1]
+    outline = load_file(outline_file)
+
+    blog_post_draft = generate_article_draft(outline)
+    print("Generated blog post draft:")
+    print(blog_post_draft)
+
+    thumbnail_image = generate_thumbnail(blog_post_draft)
+    thumbnail_file = outline_file.replace(".txt", "_thumbnail.jpeg")
+    with open(thumbnail_file, "wb") as f:
+        f.write(thumbnail_image)
+    print(f"Thumbnail saved to '{thumbnail_file}'.")
+
+    output_file = outline_file.replace(".txt", "_draft.md")
+    save_file(output_file, blog_post_draft)
+    print(f"Blog post draft saved to '{output_file}'.")
+```    
+
+```python
+def generate_article_draft(outline: str) -> str:
+    print("Generating article draft...")
+    example_posts_path = "example_posts"
+
+    if not os.path.exists(example_posts_path):
+        raise FileNotFoundError(
+            f"The directory '{example_posts_path}' does not exist.")
+
+    example_posts = []
+    for filename in os.listdir(example_posts_path):
+        if filename.lower().endswith(".md") or filename.lower().endswith(".mdx"):
+            with open(os.path.join(example_posts_path, filename), 'r', encoding='utf-8') as file:
+                example_posts.append(file.read())
+
+    if not example_posts:
+        raise ValueError(
+            "No example blog posts found in the 'example_posts' directory.")
+
+    example_posts_str = "\n\n".join(
+        f"<example-post-{i+1}>\n{post}\n</example-post-{i+1}>"
+        for i, post in enumerate(example_posts)
+    )
+
+    response = client.responses.create(
+        model="gpt-4o",
+        input=[
+            {
+                # open ai has developer role now, so we can we system or developer
+                "role": "developer",
+                "content": """
+                    You are an expert blog post author who excels at writing engaging educational blog posts.
+                    ....
+                """
+            },
+            {
+                "role": "user",
+                "content": f"""
+                    Write a detailed blog post based on the following outline:
+
+                    <outline>
+                    {outline}
+                    </outline>
+
+                    Below are some example blog posts I wrote in the past:
+                    <example-posts>
+                    {example_posts_str}
+                    </example-posts>
+
+                    Add any addition content here.....
+                """
+            }
+        ]
+    )
+
+    generated_text = response.output_text
+    # handle if output is wrapped in markdown code block
+    if generated_text.strip().startswith("```markdown"):
+        lines = generated_text.strip().splitlines()
+        if len(lines) > 2 and lines[-1].strip() == "```":
+            generated_text = "\n".join(lines[1:-1])
+
+    return generated_text
+```
+
+```python
+def generate_thumbnail(article: str) -> bytes:
+    print("Generating thumbnail...")
+
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=f"Generate a thumbnail for the following blog post: {article}",
+        n=1,
+        output_format="jpeg",
+        size="1536x1024"
+    )
+
+    image_bytes = base64.b64decode(response.data[0].b64_json)
+    return image_bytes
+```
