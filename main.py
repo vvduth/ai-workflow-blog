@@ -71,6 +71,14 @@ def generate_article_draft(
 
                 Use the language, tone, style and way of writing from the example posts to generate your draft for the new blog post.
                 DON'T use the content from those example posts!
+                
+                * Maintain the original intent and functionality of the code.
+                * format the file with proper markdown syntax.
+                * do not cut the code blocks short, keep them complete.
+                * Ensure that the text is clear and well-organized for readability.
+                * Use appropriate headings, lists, and code blocks where necessary.
+                * fix typographical errors, complete sentences, and improve clarity where needed, do not change the original meaning.
+                * do not use replace or use any flashy term, keep it authentic real and simple.
 
                 Return the blog post draft in raw markdown format so that I can directly use it in my markdown-processing pipeline.
                 Don't add any additional text or explanations, just return the raw markdown content.
@@ -286,9 +294,9 @@ def main():
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future_thumbnail = executor.submit(generate_thumbnail, blog_post_draft)
-        future_linkedin = executor.submit(generate_linkedin_post, blog_post_draft)
+        # future_linkedin = executor.submit(generate_linkedin_post, blog_post_draft)
 
-        linkedin_post = future_linkedin.result()
+        # linkedin_post = future_linkedin.result()
         thumbnail_image = future_thumbnail.result()
 
     thumbnail_file = outline_file.replace(".md", "_thumbnail.jpeg")
@@ -296,14 +304,14 @@ def main():
         f.write(thumbnail_image)
     print(f"Thumbnail saved to '{thumbnail_file}'.")
 
-    linkedin_post_file = outline_file.replace(".md", "_linkedin_post.txt")
-    save_file(linkedin_post_file, linkedin_post)
-    print(f"LinkedIn post saved to '{linkedin_post_file}'.")
+    # linkedin_post_file = outline_file.replace(".md", "_linkedin_post.txt")
+    # save_file(linkedin_post_file, linkedin_post)
+    # print(f"LinkedIn post saved to '{linkedin_post_file}'.")
 
     output_file = outline_file.replace(".md", "_draft.md")
     save_file(output_file, blog_post_draft)
     # also save into my blog folder
-    save_file("C:\\Users\\ducth\\git_repos\\quicksight-01\\markdown\\ai_ml\\ai_workflow_control_flow.md", blog_post_draft)
+    save_file(f"C:\\Users\\ducth\\git_repos\\quicksight-01\\markdown\\ai_ml\\{output_file}.md", blog_post_draft)
     
     print(f"Blog post draft saved to '{output_file}'.")
 
